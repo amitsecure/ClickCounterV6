@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ProfileViewModel"
+            type="com.example.clickcounterv6.vm.ProfileViewModel"   />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:context=".view.AddTopicActivity">
+
+<!--        <fragment-->
+<!--            android:id="@+id/fragment"-->
+<!--            android:name="com.example.clickcounterv6.view.CustomTitleBar"-->
+<!--            android:layout_weight="0.1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_marginBottom="26dp"-->
+<!--            android:layout_gravity="center_horizontal"  />-->
+
+        <FrameLayout
+            android:id="@+id/frame1"
+            android:layout_weight="0.3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"   />
+
+        <EditText
+            android:id="@+id/txtFName"
+            android:layout_weight="0.1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_margin="20dp"
+            android:text="@={ProfileViewModel.FirstName}"
+            android:inputType="text"
+            android:hint="First Name"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/txtLName"
+            android:layout_weight="0.1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_margin="20dp"
+            android:text="@={ProfileViewModel.LastName}"
+            android:hint="Last Name"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/btnNext"
+            android:layout_weight="0.1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@string/addProfileNextBtn"
+            android:onClick="@{(v) -> ProfileViewModel.onClick(v)}">
+        </Button>
+        <FrameLayout
+            android:id="@+id/frame2"
+            android:layout_weight="0.3"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"   />
+    </LinearLayout>
+</layout>

@@ -13,6 +13,7 @@ public class MyListAdapter extends ArrayAdapter<String> {
     private final Activity context;
     private final String[] Topics;
     private final String[] Counts;
+    public String newTopic;
 
     public MyListAdapter(Activity context, String[] topics,String[] counts) {
         super(context, R.layout.mylist, topics);
@@ -26,10 +27,21 @@ public class MyListAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater=context.getLayoutInflater();
         View rowView=inflater.inflate(R.layout.mylist, null,true);
 
+        TextView topicTextInit = (TextView) rowView.findViewById(R.id.my_letter);
         TextView topicText = (TextView) rowView.findViewById(R.id.txtArrayTopic);
         TextView countText = (TextView) rowView.findViewById(R.id.txtArrayCount);
 
-        topicText.setText(Topics[position]);
+        topicTextInit.setText(String.valueOf(Topics[position].charAt(0)));
+
+        if(Topics[position].length()>6)
+        {
+            newTopic =Topics[position].substring(0,6) + "..";
+        }
+        else
+        {
+            newTopic =Topics[position];
+        }
+        topicText.setText(newTopic);
         countText.setText(Counts[position]);
 
         return rowView;

@@ -54,7 +54,7 @@ public class TopicDBO extends SQLiteOpenHelper {
         boolean returnValue= true;
 
         ArrayList<String> array_list = new ArrayList<String>();
-        Cursor res = db.rawQuery( "select * from "+ TOPIC_TABLE+" where profileid = " + profileId + "", null );
+        Cursor res = db.rawQuery( "select * from "+ TOPIC_TABLE+" ", null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false) {
@@ -100,19 +100,13 @@ public class TopicDBO extends SQLiteOpenHelper {
 
     public HashMap<String, String> getAllTopics(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<String> array_list = new ArrayList<String>();
-        Cursor res = db.rawQuery( "select * from "+ TOPIC_TABLE +" where profileid = " + userId + "", null );
+        Cursor res = db.rawQuery( "select * from "+ TOPIC_TABLE +" order by topicname desc", null );
         res.moveToFirst();
         HashMap<String, String> map  = new HashMap<>();
-
-
 
         while(res.isAfterLast() == false) {
             String topicName = res.getString(res.getColumnIndex("topicname"));
             String topicCount = res.getString(res.getColumnIndex("topiccount"));
-
-            array_list.add(topicName + "--" + topicCount);
-
             map.put(topicName, topicCount);
             res.moveToNext();
         }
@@ -122,7 +116,7 @@ public class TopicDBO extends SQLiteOpenHelper {
     public boolean updateTopic(String tName,int n,int userId) {
         try {
             SQLiteDatabase db = this.getReadableDatabase();
-            String query="UPDATE " + TOPIC_TABLE + " SET topiccount = " + n + " WHERE topicname like " + "'" + tName + "%'  and  profileid = " + userId + "";
+            String query="UPDATE " + TOPIC_TABLE + " SET topiccount = " + n + " WHERE topicname like " + "'" + tName + "%' ";
             db.execSQL(query);
             return true;
         }catch (Exception ex){

@@ -7,13 +7,27 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.clickcounterv6.model.CMSData;
+import com.example.clickcounterv6.vm.MyApplication;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class ProfileDBO extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "TopicDB1.db";
     public static final String PROFILE_TABLE = "tbl_profile";
     public static final String TOPIC_TABLE = "tbl_topic";
+    public static final String CMS_TABLE = "tbl_cms";
 
     public ProfileDBO(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -27,6 +41,10 @@ public class ProfileDBO extends SQLiteOpenHelper {
             );
             db.execSQL(
                     "create table " + TOPIC_TABLE + "(topicid integer Primary key autoincrement, topicname text unique not null, topiccount integer,profileid integer)"
+            );
+            db.execSQL(
+                    "create table " + CMS_TABLE + "(cmsid integer Primary key autoincrement, cmspage text not null,cmskeyname text unique not null,cmsvalEngname text unique not null )"
+
             );
 
         } catch (SQLiteException e) {
@@ -76,4 +94,9 @@ public class ProfileDBO extends SQLiteOpenHelper {
         }
         return isExist;
     }
+
+
+
+
+
 }

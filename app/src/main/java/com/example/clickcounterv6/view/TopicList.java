@@ -11,32 +11,39 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clickcounterv6.R;
+import com.example.clickcounterv6.dbl.CmsDBO;
 import com.example.clickcounterv6.dbl.TopicDBO;
 import com.example.clickcounterv6.vm.MyApplication;
 import com.example.clickcounterv6.vm.MyListAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class TopicList extends Fragment {
     ListView topiclistView;
-    TextView textView,txtSelectedTopic,txtCount ,txtTopic;
-    String[] topicArray;
-    ArrayList<String> topicList = new ArrayList<String>();
+    TextView txtSelectedTopic,txtCount;
+    EditText txtTopic;
     TopicDBO topicDBHelper;
     View rootView;
+
     int userId,n;
-    Button btnIncCounter,btnResetCounter;
+
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String profId = "idKey";
+    CmsDBO cmsDBHelper = new CmsDBO(MyApplication.getContext());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,15 +51,36 @@ public class TopicList extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_topic_list, container, false);
 
+        final FloatingActionButton btnAddTopic=rootView.findViewById(R.id.btnAddTopic);
+       // final Button btnExit=rootView.findViewById(R.id.btnExitApp);
+
+
+        final Button btnSave=rootView.findViewById(R.id.btnSaveTopicTP);
+        final Button btnIncrCounter=rootView.findViewById(R.id.btnIncreCounterTP);
+        final Button btnResetCounter=rootView.findViewById(R.id.btnResetCounterTP);
+        final Button btnGoToListCT =rootView.findViewById(R.id.btnGoToListCTTP);
+        final Button btnGoToListAT =rootView.findViewById(R.id.btnGoToListATTP);
+        txtTopic = (EditText) rootView.findViewById(R.id.txtTopicTP);
+        txtCount=(TextView)rootView.findViewById(R.id.txtCountTP);
+        txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopicTP);
+
+        HashMap<String, String> cmshmap = cmsDBHelper.getAllCMSPageData("topicpage");
+
+        btnSave.setText(cmshmap.get("key_btnSaveTopicTP"));
+        btnIncrCounter.setText(cmshmap.get("key_btnIncreCounterTP"));
+        btnResetCounter.setText(cmshmap.get("key_btnResetTP"));
+        btnGoToListCT.setText(cmshmap.get("key_btnGoToListTP"));
+        btnGoToListAT.setText(cmshmap.get("key_btnGoToListTP"));
+        txtTopic.setHint(cmshmap.get("key_txtTopicTP"));
+
         sharedpreferences = MyApplication.getContext().getSharedPreferences(MyPREFERENCES, MyApplication.getContext().MODE_PRIVATE);
-        userId = Integer. parseInt((sharedpreferences.getString(profId, "")));
+        userId = Integer. parseInt((sharedpreferences.getString(profId, "0")));
 
         topicDBHelper = new TopicDBO(MyApplication.getContext());
         getData();
 
         //Redirect from List Topic to Add Topic
-        final Button btnAddTopic=rootView.findViewById(R.id.btnAddTopic);
-
+        //final Button btnAddTopic=rootView.findViewById(R.id.btnAddTopic);
         btnAddTopic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,21 +89,21 @@ public class TopicList extends Fragment {
         });
 
         //Save Topic logic
-        final Button btnSave=rootView.findViewById(R.id.btnSaveTopic);
-
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtTopic = (TextView) rootView.findViewById(R.id.txtTopic);
-                String strTopicName = txtTopic.getText().toString();
+                String strTopic = txtTopic.getText().toString();
 
-                if(TextUtils.isEmpty(strTopicName)) {
+                if(TextUtils.isEmpty(strTopic)) {
                     txtTopic.setError("Enter Topic");
                     txtTopic.requestFocus();
                     return;
                 }
 
-                boolean output = saveTopic();
+                boolean output = saveTopic(strTopic);
+                txtTopic.setText("");
+                txtTopic.setError(null);
+
                 if(output)
                 {
                     txtTopic.setHint("Enter Topic");
@@ -88,14 +116,11 @@ public class TopicList extends Fragment {
             }
         });
 
-        final Button btnIncrTopic=rootView.findViewById(R.id.btnIncreCounter);
-        btnIncrTopic.setOnClickListener(new View.OnClickListener() {
+
+        btnIncrCounter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtCount=(TextView)rootView.findViewById(R.id.txtCount);
                 n = Integer.parseInt(txtCount.getText().toString());
-
-                txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopic);
                 String currentTopic = (txtSelectedTopic.getText().toString());
 
                 topicDBHelper.updateTopic(currentTopic,n+1,userId);
@@ -103,20 +128,19 @@ public class TopicList extends Fragment {
             }
         });
 
-        final Button btnResetCounter=rootView.findViewById(R.id.btnResetCounter);
         btnResetCounter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 txtCount.setText("0");
 
-                txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopic);
+                txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopicTP);
                 String currentTopic = (txtSelectedTopic.getText().toString());
 
                 topicDBHelper.updateTopic(currentTopic,0,userId);
             }
         });
-        final Button btnGoToList=rootView.findViewById(R.id.btnGoToList);
-        btnGoToList.setOnClickListener(new View.OnClickListener() {
+
+        btnGoToListCT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getData();
@@ -124,24 +148,23 @@ public class TopicList extends Fragment {
             }
         });
 
-        final Button btnCancel=rootView.findViewById(R.id.btnCancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnGoToListAT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtTopic.setText("");
+                txtTopic.setError(null);
                 getData();
                 layoutVisibility(1);
             }
         });
 
-
-        final Button btnExit=rootView.findViewById(R.id.btnExitApp);
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().moveTaskToBack(true);
-                getActivity().finish();
-            }
-        });
+//        btnExit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                getActivity().moveTaskToBack(true);
+//                getActivity().finish();
+//            }
+//        });
 
         return rootView;
     }
@@ -156,14 +179,20 @@ public class TopicList extends Fragment {
         final String[] mainTopics = new String[topicCountMap.size()];
         final String[] topicCounts = new String[topicCountMap.size()];
 
-        for (Map.Entry mapElement : topicCountMap.entrySet()) {
-            String key = (String)mapElement.getKey();
-            String value = (String)mapElement.getValue();
+        Map<String, String> map = new TreeMap<String, String>(topicCountMap);
+        Set set2 = map.entrySet();
+        Iterator iterator2 = set2.iterator();
+        while(iterator2.hasNext()) {
+            Map.Entry me2 = (Map.Entry)iterator2.next();
+
+            String key = (String)me2.getKey();
+            String value = (String)me2.getValue();
 
             mainTopics[i] = key;
             topicCounts[i] = value;
             i++;
         }
+
 
         final MyListAdapter topicAdapter=new MyListAdapter(getActivity(), mainTopics, topicCounts);
         topiclistView=(ListView) rootView.findViewById(R.id.topicListView);
@@ -177,10 +206,10 @@ public class TopicList extends Fragment {
 
                 String topicCount = topicCounts[position];
 
-                txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopic);
+                txtSelectedTopic=(TextView)rootView.findViewById(R.id.txtSelectedTopicTP);
                 txtSelectedTopic.setText(value);
 
-                txtCount=(TextView)rootView.findViewById(R.id.txtCount);
+                txtCount=(TextView)rootView.findViewById(R.id.txtCountTP);
                 txtCount.setText(topicCount);
             }
         });
@@ -219,14 +248,10 @@ public class TopicList extends Fragment {
 
     }
 
-    public boolean saveTopic() {
+    public boolean saveTopic(String strTopic) {
         boolean output = false;
         try {
-            txtTopic = (TextView) rootView.findViewById(R.id.txtTopic);
-            String tName = txtTopic.getText().toString();
-
-            output = topicDBHelper.insertTopic(tName.toUpperCase(),0 ,userId);
-            txtTopic.setText("");
+            output = topicDBHelper.insertTopic(strTopic.toUpperCase(),0 ,userId);
 
         } catch (Exception ex) {
         }

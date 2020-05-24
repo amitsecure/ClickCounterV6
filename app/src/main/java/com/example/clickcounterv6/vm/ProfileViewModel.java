@@ -45,7 +45,7 @@ public class ProfileViewModel extends ViewModel {
         profileMutableLiveData.setValue(profile);
 
         if (FirstName.getValue() != null && !FirstName.getValue().trim().equals("") && LastName.getValue() != null && !LastName.getValue().trim().equals("")) {
-            if (view.getId() == R.id.btnNext) {
+            if (view.getId() == R.id.btnNextLP) {
                 String fName = FirstName.getValue().toUpperCase();
                 String lName = LastName.getValue().toUpperCase();
 

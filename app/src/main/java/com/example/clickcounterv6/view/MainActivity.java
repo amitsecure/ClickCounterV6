@@ -17,10 +17,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.view.Window;
-import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.clickcounterv6.dbl.CmsDBO;
 import com.example.clickcounterv6.dbl.ProfileDBO;
 import com.example.clickcounterv6.model.Profile;
 import com.example.clickcounterv6.R;
@@ -28,52 +28,48 @@ import com.example.clickcounterv6.databinding.ActivityMainBinding;
 import com.example.clickcounterv6.vm.MyApplication;
 import com.example.clickcounterv6.vm.ProfileViewModel;
 
+import java.util.HashMap;
 import java.util.Objects;
+
 import static android.Manifest.permission.READ_PHONE_NUMBERS;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.READ_SMS;
 
 public class MainActivity extends AppCompatActivity {
-    EditText txtFname , txtLname;
-
-    //ProfileDBO profileDBHelper;
     private ProfileViewModel profileViewModel;
     private ActivityMainBinding activityMainBinding ;
     ProfileDBO profileDBHelper = new ProfileDBO(MyApplication.getContext());
-    String strTelNo = "";
+    CmsDBO cmsDBHelper = new CmsDBO(MyApplication.getContext());
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String telNo = "telNoKey";
+    String strTelNo = "";
     SharedPreferences sharedpreferences;
     Intent myIntent;
+    Boolean flag;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Full Screen Window
-        requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
-        getSupportActionBar().hide(); // hide the title bar
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
+        //requestWindowFeature(Window.FEATURE_NO_TITLE); //will hide the title
+        //getSupportActionBar().hide(); // hide the title bar
+        //this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        //WindowManager.LayoutParams.FLAG_FULLSCREEN); //enable full screen
 
-//        if(profileDBHelper.isUserExist())
-//        {
-//            Intent myIntent = new Intent(this, TabMainActivity.class);
-//            startActivity(myIntent);
-//        }
-
-        Boolean flag;
         sharedpreferences = MyApplication.getContext().getSharedPreferences(MyPREFERENCES, MyApplication.getContext().MODE_PRIVATE);
         flag = sharedpreferences.getBoolean("FirstLaunch", true);
 
         if(flag){
             savePreferences();
         }else {
-            myIntent = new Intent(this, TabMainActivity.class);
-            startActivity(myIntent);
-            finish();
+            if(profileDBHelper.isUserExist())
+            {
+                myIntent = new Intent(this, TabMainActivity.class);
+                startActivity(myIntent);
+                finish();
+            }
         }
 
         getPhoneNo();
@@ -90,15 +86,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Profile profile) {
                 if (TextUtils.isEmpty(Objects.requireNonNull(profile).getStrFname())) {
-                    activityMainBinding.txtFName.setError("Enter First Name");
-                    activityMainBinding.txtFName.requestFocus();
+                    activityMainBinding.txtFNameLP.setError("Enter First Name");
+                    activityMainBinding.txtFNameLP.requestFocus();
                 }
                 else if (TextUtils.isEmpty(Objects.requireNonNull(profile).getStrLname())) {
-                    activityMainBinding.txtLName.setError("Enter Last Name");
-                    activityMainBinding.txtLName.requestFocus();
+                    activityMainBinding.txtLNameLP.setError("Enter Last Name");
+                    activityMainBinding.txtLNameLP.requestFocus();
                 }
             }
         });
+
+        HashMap<String, String> cmshmap = cmsDBHelper.getAllCMSPageData("mainpage");
+
+        Button btnNext=(Button)findViewById(R.id.btnNextLP);
+        btnNext.setText(cmshmap.get("key_btnNextLP"));
+
+        EditText txtFname=(EditText)findViewById(R.id.txtFNameLP);
+        txtFname.setHint(cmshmap.get("key_txtFNameLP"));
+
+        EditText txtLname=(EditText)findViewById(R.id.txtLNameLP);
+        txtLname.setHint(cmshmap.get("key_txtLNameLP"));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -170,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
         moveTaskToBack(true);
         finish();
     }
+
 }
 
 //https://stackoverflow.com/questions/21619702/android-how-to-skip-first-activity
@@ -182,3 +190,6 @@ public class MainActivity extends AppCompatActivity {
 //https://www.tutorialspoint.com/android/android_session_management.htm
 //https://stackoverflow.com/questions/8585712/how-to-delete-sqlite-database-of-my-application-in-android-mobile-manually/8585802
 //https://stackoverflow.com/questions/37093723/how-to-add-an-android-studio-project-to-github
+
+//https://beginnersbook.com/2013/12/hashmap-in-java-with-example/
+//https://www.tutorialspoint.com/android/android_xml_parsers.htm

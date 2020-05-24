@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,37 +19,50 @@
 
         <ListView
             android:id="@+id/topicListView"
-            android:layout_weight="0.8"
+            android:layout_weight="0.75"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="26dp"
+            android:layout_height="0sp"
+            android:layout_marginBottom="26sp"
             android:layout_gravity="center_horizontal"
             android:textSize="22sp"
             android:textAlignment="center"
-            android:padding="10dp"
-            android:layout_margin="8dp">
+            android:padding="10sp"
+            android:layout_margin="8sp">
         </ListView>
 
-        <Button
-        android:id="@+id/btnAddTopic"
-        android:layout_weight="0.1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:layout_margin="10dp"
-        android:textSize="15sp"
-        android:text="Add New Topic">
-    </Button>
-        <Button
-            android:id="@+id/btnExitApp"
-            android:layout_weight="0.1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:padding="10dp"
-            android:layout_margin="10dp"
-            android:textSize="15sp"
-            android:text="Exit">
-        </Button>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAddTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16sp"
+            app:elevation="8sp"
+            app:hoveredFocusedTranslationZ="2sp"
+            app:pressedTranslationZ="6sp"
+            app:showMotionSpec="@anim/fragment_fade_enter"
+            app:srcCompat="@drawable/ic_add_black_24dp"
+            tools:ignore="VectorDrawableCompat" />
+
+<!--        <Button-->
+<!--        android:id="@+id/btnAddTopic"-->
+<!--        android:layout_weight="0.1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:padding="10dp"-->
+<!--        android:layout_margin="10dp"-->
+<!--        android:textSize="15sp"-->
+<!--        android:text="Add New Topic">-->
+<!--    </Button>-->
+<!--        <Button-->
+<!--            android:id="@+id/btnExitApp"-->
+<!--            android:layout_weight="0.15"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0sp"-->
+<!--            android:padding="10sp"-->
+<!--            android:layout_margin="10sp"-->
+<!--            android:textSize="15sp"-->
+<!--            android:text="Exit">-->
+<!--        </Button>-->
     </LinearLayout>
 
     <LinearLayout
@@ -63,54 +76,51 @@
 
         <FrameLayout
             android:id="@+id/frame1"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"   />
+            android:layout_height="0sp"   />
         <EditText
-            android:id="@+id/txtTopic"
-            android:layout_weight="0.1"
+            android:id="@+id/txtTopicTP"
+            android:layout_weight="0.2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_centerInParent="true"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="100sp"
             android:textColor="@color/black"
-            android:textSize="15sp"
-            android:layout_margin="20dp"
-            android:hint="Enter Topic"
-            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-            android:inputType="textCapCharacters"/>
+            android:textSize="33sp"
+            android:layout_margin="20sp"
+            android:inputType="text"/>
 
+<!--        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"-->
         <LinearLayout
             android:layout_weight="0.1"
             android:weightSum="1"
             android:orientation="horizontal"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_margin="8dp">
+            android:layout_margin="8sp">
             <Button
-                android:id="@+id/btnSaveTopic"
+                android:id="@+id/btnSaveTopicTP"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:textSize="15sp"
-                android:text="Save">
+                android:textSize="15sp"  >
             </Button>
             <Button
-                android:id="@+id/btnCancel"
+                android:id="@+id/btnGoToListATTP"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:textSize="15sp"
-                android:text="GoTo List">
+                android:textSize="15sp">
             </Button>
         </LinearLayout>
 
         <FrameLayout
             android:id="@+id/frame2"
-            android:layout_weight="0.4"
+            android:layout_weight="0.3"
             android:layout_width="match_parent"
-            android:layout_height="0dp"   />
+            android:layout_height="0sp"   />
     </LinearLayout>
 
     <LinearLayout
@@ -122,18 +132,17 @@
         android:visibility="invisible"
         android:id="@+id/countTopicLayout">
 
-
         <TextView
-            android:id="@+id/txtSelectedTopic"
+            android:id="@+id/txtSelectedTopicTP"
             android:layout_weight="0.1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
             android:textSize="25sp"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:layout_margin="8dp"
+            android:layout_margin="8sp"
             android:text=""/>
 
         <LinearLayout
@@ -141,23 +150,22 @@
             android:weightSum="1"
             android:orientation="horizontal"
             android:id="@+id/LinearLayout03"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_margin="8dp">
+            android:layout_margin="8sp">
             <TextView
-                android:id="@+id/txtCount"
+                android:id="@+id/txtCountTP"
                 android:layout_weight="0.5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="26dp"
+                android:layout_marginBottom="26sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"
                 android:textSize="125sp"
-                android:padding="10dp"
+                android:padding="10sp"
                 android:textStyle="bold"
-                android:layout_margin="8dp"
-                android:text="0"/>
+                android:layout_margin="8sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -165,36 +173,33 @@
             android:weightSum="1"
             android:orientation="horizontal"
             android:id="@+id/LinearLayout02"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_margin="8dp">
+            android:layout_margin="8sp">
             <Button
-                android:id="@+id/btnResetCounter"
-                android:layout_width="0dp"
+                android:id="@+id/btnResetCounterTP"
+                android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:textSize="15sp"
-                android:text="Reset">
+                android:textSize="15sp">
             </Button>
             <Button
-                android:id="@+id/btnIncreCounter"
-                android:layout_marginLeft="8dp"
-                android:layout_width="0dp"
+                android:id="@+id/btnIncreCounterTP"
+                android:layout_marginLeft="8sp"
+                android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
-                android:textSize="15sp"
-                android:text="Click">
+                android:textSize="15sp">
             </Button>
         </LinearLayout>
         <Button
-            android:id="@+id/btnGoToList"
+            android:id="@+id/btnGoToListCTTP"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="0sp"
             android:layout_weight="0.1"
-            android:layout_margin="8dp"
-            android:textSize="15sp"
-            android:text="GoTo List">
+            android:layout_margin="8sp"
+            android:textSize="15sp">
         </Button>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

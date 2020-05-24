@@ -180,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
 
 }
 
+//https://vasundharavision.com/blog/android/firebase-crud-operation-for-android
+
 //https://stackoverflow.com/questions/21619702/android-how-to-skip-first-activity
 //https://tausiq.wordpress.com/2014/06/06/android-multiple-fragments-stack-in-each-viewpager-tab/
 //http://www.lucazanini.eu/en/2013/android/replacing-fragment-tab-layout-actionbar/

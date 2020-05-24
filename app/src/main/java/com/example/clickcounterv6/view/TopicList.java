@@ -158,14 +158,6 @@ public class TopicList extends Fragment {
             }
         });
 
-//        btnExit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().moveTaskToBack(true);
-//                getActivity().finish();
-//            }
-//        });
-
         return rootView;
     }
 
@@ -192,7 +184,6 @@ public class TopicList extends Fragment {
             topicCounts[i] = value;
             i++;
         }
-
 
         final MyListAdapter topicAdapter=new MyListAdapter(getActivity(), mainTopics, topicCounts);
         topiclistView=(ListView) rootView.findViewById(R.id.topicListView);
